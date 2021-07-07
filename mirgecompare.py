@@ -66,8 +66,8 @@ class XdmfReader():
 
         domains = tuple(root)
         self.domain = domains[0]
-        # TODO: add functionality for multiple grids/grid types ?
         self.grids = tuple(self.domain)
+        # TODO: add functionality for multiple grids/grid types ?
         self.uniform_grid = self.grids[0]
 
     def get_topology(self):
@@ -290,7 +290,7 @@ def compare_files_hdf5(first_file, second_file, tolerance = 1e-12):
                     print("Tolerance:", tolerance, "\n", "Data List:", curr_listname1)
                     raise ValueError("Fidelity test failed: Mismatched data values with given tolerance")
 
-    print("HDF5 Fidelity test completed successfully with tolerance", tolerance)
+    print("Hdf5 Fidelity test completed successfully with tolerance", tolerance)
 
 # run fidelity check
 if __name__ == "__main__":
@@ -323,4 +323,4 @@ if __name__ == "__main__":
     elif file_type == "hdf5" or file_type == "h5":
         compare_files_hdf5(first_file, second_file, user_tolerance)
     else:
-        raise TypeError()("File type not supported")
+        raise TypeError("File type not supported")
