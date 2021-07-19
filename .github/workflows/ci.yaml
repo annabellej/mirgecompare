@@ -60,3 +60,21 @@ jobs:
           echo "Fidelity check rightly failed"
           exit 0
         fi
+  
+  rank_checks:
+    name: Rank Checking
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Runs example mpi files to verify rank checking (pvtu)
+      run: |
+        python -m pip install numpy vtk h5py
+        python ./mirgecompare.py examples/rank1/fld-wave-eager-mpi-000-0000.pvtu examples/rank1/fld-wave-eager-mpi-000-0000.pvtu
+        if python ./mirgecompare.py examples/rank1/fld-wave-eager-mpi-000-0000.pvtu examples/rank2/fld-wave-eager-mpi-000-0000.pvtu ; then
+          echo "Fidelity check wrongly succeeded"
+          exit 1
+        else
+          echo "Fidelity check rightly failed"
+          exit 0
+        fi
