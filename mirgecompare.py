@@ -20,17 +20,8 @@ def compare_files_vtu(first_file, second_file, file_type, tolerance = 1e-12):
     reader2.Update()
     output2 = reader2.GetOutput()
 
-    point_data1 = output1.GetPointData()
-    point_data2 = output2.GetPointData()
-
-    # CURRENTLY DOES NOT SUPPORT FILES OF DIFFERENT RANKS
-
-    # verify same number of PointData arrays in both files
-    if point_data1.GetNumberOfArrays() != point_data2.GetNumberOfArrays():
-        print("File 1:", point_data1.GetNumberOfArrays(), "\n", "File 2:", point_data2.GetNumberOfArrays())
-        raise ValueError("Fidelity test failed: Mismatched data array count")
     # for pvtu files: check same rank [same # of source vtu files]
-    elif file_type == "pvtu":
+    if file_type == "pvtu":
         file1 = open(first_file, "r")
         file2 = open(second_file, "r")
         counter1 = counter2 = 0
@@ -43,6 +34,16 @@ def compare_files_vtu(first_file, second_file, file_type, tolerance = 1e-12):
         if counter1 != counter2:
             print("File 1: rank " + str(counter1) + "\n" + "File 2: rank " + str(counter2))
             raise ValueError("Fidelity test failed: Input files have different rank numbers")
+
+    point_data1 = output1.GetPointData()
+    point_data2 = output2.GetPointData()
+
+    # CURRENTLY DOES NOT SUPPORT FILES OF DIFFERENT RANKS
+
+    # verify same number of PointData arrays in both files
+    if point_data1.GetNumberOfArrays() != point_data2.GetNumberOfArrays():
+        print("File 1:", point_data1.GetNumberOfArrays(), "\n", "File 2:", point_data2.GetNumberOfArrays())
+        raise ValueError("Fidelity test failed: Mismatched data array count")
 
     for i in range(point_data1.GetNumberOfArrays()):
         arr1 = point_data1.GetArray(i)
