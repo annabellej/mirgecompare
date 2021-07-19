@@ -20,25 +20,23 @@ def compare_files_vtu(first_file, second_file, file_type, tolerance = 1e-12):
     reader2.Update()
     output2 = reader2.GetOutput()
 
+    # CURRENTLY DOES NOT SUPPORT FILES OF DIFFERENT RANKS
     # for pvtu files: check same rank [same # of source vtu files]
-    if file_type == "pvtu":
-        file1 = open(first_file, "r")
-        file2 = open(second_file, "r")
-        counter1 = counter2 = 0
+    file1 = open(first_file, "r")
+    file2 = open(second_file, "r")
+    counter1 = counter2 = 0
 
-        for line in file1:
-            if "Source" in line: counter1 += 1
-        for line in file2:
-            if "Source" in line: counter2 += 1
+    for line in file1:
+        if "Source" in line: counter1 += 1
+    for line in file2:
+        if "Source" in line: counter2 += 1
 
-        if counter1 != counter2:
-            print("File 1: rank " + str(counter1) + "\n" + "File 2: rank " + str(counter2))
-            raise ValueError("Fidelity test failed: Input files have different rank numbers")
+    if counter1 != counter2:
+        print("File 1: rank " + str(counter1) + "\n" + "File 2: rank " + str(counter2))
+        raise ValueError("Fidelity test failed: Input files have different rank numbers")
 
     point_data1 = output1.GetPointData()
     point_data2 = output2.GetPointData()
-
-    # CURRENTLY DOES NOT SUPPORT FILES OF DIFFERENT RANKS
 
     # verify same number of PointData arrays in both files
     if point_data1.GetNumberOfArrays() != point_data2.GetNumberOfArrays():
